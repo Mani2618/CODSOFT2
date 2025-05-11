@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Generate Password</title>
 
   <!-- Internal CSS -->
@@ -20,6 +20,7 @@
       background: linear-gradient(135deg, #1f1c2c, #928dab);
       color: white;
     }
+
     nav {
       background-color: #333;
       padding: 15px;
@@ -47,6 +48,7 @@
       margin-left: auto;
       padding-right: 15px;
     }
+
     .container {
       background: white;
       padding: 30px 40px;
@@ -60,18 +62,22 @@
     body.dark .container {
       background: #333;
     }
+
     h1 {
       margin-bottom: 20px;
       color: inherit;
     }
+
     .input-group, .output-group {
       margin: 20px 0;
       text-align: left;
     }
+
     label {
       font-size: 14px;
       color: inherit;
     }
+
     input[type="number"] {
       width: 100%;
       padding: 8px;
@@ -80,9 +86,20 @@
       border-radius: 8px;
       font-size: 16px;
     }
+
     input[type="checkbox"] {
       margin-right: 10px;
+      transform: scale(1.2);
+      vertical-align: middle;
     }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+      font-size: 15px;
+    }
+
     button, .btn {
       background-color: #4CAF50;
       color: white;
@@ -95,9 +112,11 @@
       text-decoration: none;
       transition: background-color 0.3s;
     }
+
     button:hover, .btn:hover {
       background-color: #45a049;
     }
+
     #password {
       background-color: #f3f3f3;
       padding: 10px;
@@ -105,27 +124,40 @@
       word-break: break-word;
       color: black;
     }
+
     body.dark #password {
       background-color: #555;
       color: white;
     }
   </style>
-
 </head>
 <body>
-
-  
   <div class="container">
     <h1>Generate Password</h1>
 
     <div class="input-group">
       <label for="length">Password Length:</label>
-      <input type="number" id="length" min="1" max="100" placeholder="Enter length">
+      <input type="number" id="length" min="1" max="100" placeholder="Enter length" />
     </div>
 
-    <div class="input-group">
-      <input type="checkbox" id="includeSymbols" checked>
-      <label for="includeSymbols">Include Symbols (e.g., @#$%)</label>
+    <div class="input-group checkbox-label">
+      <input type="checkbox" id="includeUppercase" checked />
+      <label for="includeUppercase">Include Uppercase Letters (A-Z)</label>
+    </div>
+
+    <div class="input-group checkbox-label">
+      <input type="checkbox" id="includeLowercase" checked />
+      <label for="includeLowercase">Include Lowercase Letters (a-z)</label>
+    </div>
+
+    <div class="input-group checkbox-label">
+      <input type="checkbox" id="includeNumbers" checked />
+      <label for="includeNumbers">Include Numbers (0-9)</label>
+    </div>
+
+    <div class="input-group checkbox-label">
+      <input type="checkbox" id="includeSymbols" checked />
+      <label for="includeSymbols">Include Symbols (@#$%)</label>
     </div>
 
     <button onclick="generatePassword()">Generate Password</button>
@@ -141,7 +173,10 @@
   <script>
     function generatePassword() {
       const length = document.getElementById('length').value;
-      const includeSymbols = document.getElementById('includeSymbols').checked;
+      const useUppercase = document.getElementById('includeUppercase').checked;
+      const useLowercase = document.getElementById('includeLowercase').checked;
+      const useNumbers = document.getElementById('includeNumbers').checked;
+      const useSymbols = document.getElementById('includeSymbols').checked;
       const passwordOutput = document.getElementById('password');
 
       if (!length || length <= 0) {
@@ -149,13 +184,18 @@
         return;
       }
 
-      let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-      if (includeSymbols) {
-        characters += '!@#$%^&*()_+[]{}|;:,.<>?';
+      let characters = '';
+      if (useUppercase) characters += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      if (useLowercase) characters += 'abcdefghijklmnopqrstuvwxyz';
+      if (useNumbers) characters += '0123456789';
+      if (useSymbols) characters += '!@#$%^&*()_+[]{}|;:,.<>?';
+
+      if (characters === '') {
+        passwordOutput.textContent = "Please select at least one character type.";
+        return;
       }
 
       let password = '';
-
       for (let i = 0; i < length; i++) {
         const randomIndex = Math.floor(Math.random() * characters.length);
         password += characters[randomIndex];
@@ -182,12 +222,11 @@
       document.body.classList.toggle('dark');
       const modeButton = document.querySelector('.mode-toggle');
       if (document.body.classList.contains('dark')) {
-        modeButton.textContent = "☀️"; // Sun
+        modeButton.textContent = "☀️";
       } else {
-        modeButton.textContent = "🌙"; // Moon
+        modeButton.textContent = "🌙";
       }
     }
   </script>
-
 </body>
 </html>
